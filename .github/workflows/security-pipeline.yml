@@ -39,7 +39,7 @@ jobs:
           path: bandit-report.json
 
   sca:
-    name: SCA (Safety)
+    name: SCA (pip-audit)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,12 +47,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Safety
-        run: pip install safety
-      - name: Run Safety Check
-        run: safety check -r app/requirements.txt --json > safety-report.json || true
-      - name: Upload Safety Report
+      - name: Install pip-audit
+        run: pip install pip-audit
+      - name: Run pip-audit
+        run: pip-audit -r app/requirements.txt -f json -o pip-audit-report.json || true
+      - name: Upload pip-audit Report
         uses: actions/upload-artifact@v4
         with:
-          name: safety-report
-          path: safety-report.json
+          name: pip-audit-report
+          path: pip-audit-report.json
