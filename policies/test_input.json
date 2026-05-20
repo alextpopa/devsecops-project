@@ -1,0 +1,6 @@
+{
+    "runs_as_root": false,
+    "debug_mode": false,
+    "hardcoded_secrets": false,
+    "base_image": "python:3.11-slim"
+}
