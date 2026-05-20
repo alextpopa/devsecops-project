@@ -1,0 +1,6 @@
+{
+    "runs_as_root": true,
+    "debug_mode": true,
+    "hardcoded_secrets": true,
+    "base_image": "python:latest"
+}

@@ -77,3 +77,37 @@ jobs:
         with:
           name: trivy-report
           path: trivy-report.json
+
+  policy-check:
+    name: Policy-as-Code (OPA)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OPA
+        run: |
+          curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64
+          chmod +x opa
+          sudo mv opa /usr/local/bin/
+      - name: Create policy input
+        run: |
+          cat > policy_input.json << 'EOF'
+          {
+            "runs_as_root": false,
+            "debug_mode": false,
+            "hardcoded_secrets": false,
+            "base_image": "python:3.11-slim"
+          }
+          EOF
+      - name: Run OPA policy check
+        run: |
+          RESULT=$(opa eval \
+            --input policy_input.json \
+            --data policies/dockerfile_policy.rego \
+            "data.dockerfile.security.deny" \
+            --format raw)
+          echo "Policy violations: $RESULT"
+          if [ "$RESULT" != "[]" ]; then
+            echo "Policy violations found!"
+            exit 1
+          fi
+          echo "All policies passed!"
