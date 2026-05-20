@@ -1,0 +1,8 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-secret"
+description = "Generic hardcoded secret"
+regex = '''(?i)(secret_key|db_password|password|passwd)\s*=\s*["'][^"']{4,}["']'''
+tags = ["secret", "generic"]
